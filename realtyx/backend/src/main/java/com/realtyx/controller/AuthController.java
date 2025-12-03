@@ -22,8 +22,8 @@ public class AuthController {
     
     @GetMapping("/admin-users/{id}")
     public AdminUser getAdminUserById(@PathVariable Long id) {
-        return jsonFileStore.getAdminUsers().stream()
-                .filter(admin -> admin.getId().equals(id))
+    return jsonFileStore.getAdminUsers().stream()
+        .filter(admin -> Long.valueOf(admin.id).equals(id))
                 .findFirst()
                 .orElse(null);
     }

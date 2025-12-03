@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@Component
+
+import com.realtyx.model.AdminUser;
+
 public class JsonFileStore<T> {
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final ObjectMapper objectMapper;
@@ -68,6 +70,21 @@ public class JsonFileStore<T> {
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+    // Static method to read admin_users.json as List<AdminUser>
+    public static List<AdminUser> getAdminUsers() {
+        ObjectMapper mapper = new ObjectMapper();
+        String filePath = "data/admin_users.json";
+        try {
+            File file = new File(filePath);
+            if (!file.exists() || file.length() == 0) {
+                return new ArrayList<>();
+            }
+            return mapper.readValue(file, new TypeReference<List<AdminUser>>() {});
+        } catch (IOException e) {
+            System.err.println("Error reading admin_users.json: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 }
