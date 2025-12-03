@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "fileName": "properties_batch_nov2025.csv",
+    "status": "COMPLETED",
+    "totalRecords": 50,
+    "successCount": 48,
+    "failureCount": 2,
+    "startedAt": "2025-11-20T08:00:00Z",
+    "completedAt": "2025-11-20T08:15:00Z",
+    "importedBy": "admin",
+    "errors": [
+      {"row": 15, "reason": "Invalid price format"},
+      {"row": 32, "reason": "Missing required field: address"}
+    ]
+  },
+  {
+    "id": 2,
+    "fileName": "brokers_update_nov2025.json",
+    "status": "COMPLETED",
+    "totalRecords": 12,
+    "successCount": 12,
+    "failureCount": 0,
+    "startedAt": "2025-11-15T10:30:00Z",
+    "completedAt": "2025-11-15T10:32:00Z",
+    "importedBy": "manager",
+    "errors": []
+  },
+  {
+    "id": 3,
+    "fileName": "properties_oct2025.xlsx",
+    "status": "FAILED",
+    "totalRecords": 25,
+    "successCount": 0,
+    "failureCount": 25,
+    "startedAt": "2025-10-28T14:00:00Z",
+    "completedAt": "2025-10-28T14:05:00Z",
+    "importedBy": "admin",
+    "errors": [
+      {"row": 0, "reason": "Invalid file format"}
+    ]
+  },
+  {
+    "id": 4,
+    "fileName": "new_properties_nov2025.csv",
+    "status": "IN_PROGRESS",
+    "totalRecords": 35,
+    "successCount": 20,
+    "failureCount": 2,
+    "startedAt": "2025-11-29T07:00:00Z",
+    "completedAt": null,
+    "importedBy": "admin",
+    "errors": [
+      {"row": 8, "reason": "Duplicate property ID"},
+      {"row": 14, "reason": "Invalid broker reference"}
+    ]
+  }
+]

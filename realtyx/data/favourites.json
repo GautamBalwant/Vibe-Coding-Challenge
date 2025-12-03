@@ -1,0 +1,32 @@
+[
+  {
+    "userId": "user_001",
+    "propertyId": 101,
+    "addedAt": "2025-11-28T10:30:00Z"
+  },
+  {
+    "userId": "user_001",
+    "propertyId": 103,
+    "addedAt": "2025-11-27T15:45:00Z"
+  },
+  {
+    "userId": "user_001",
+    "propertyId": 106,
+    "addedAt": "2025-11-26T09:20:00Z"
+  },
+  {
+    "userId": "user_002",
+    "propertyId": 102,
+    "addedAt": "2025-11-28T14:10:00Z"
+  },
+  {
+    "userId": "user_002",
+    "propertyId": 105,
+    "addedAt": "2025-11-27T11:30:00Z"
+  },
+  {
+    "userId": "user_003",
+    "propertyId": 104,
+    "addedAt": "2025-11-25T16:00:00Z"
+  }
+]

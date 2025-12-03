@@ -1,0 +1,298 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Admin Header -->
+  <header class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Add New Property</h1>
+        <p class="text-gray-600">Welcome, <%= adminUser %></p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="/admin/dashboard" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</a>
+        <a href="/admin/logout" class="text-red-600 hover:text-red-800">Logout</a>
+      </div>
+    </div>
+  </header>
+  
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <% if (locals.success) { %>
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+        <%= success %>
+        <a href="/admin/dashboard" class="underline ml-2">View Dashboard</a>
+      </div>
+    <% } %>
+    
+    <% if (locals.error) { %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <%= error %>
+      </div>
+    <% } %>
+    
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <form method="POST" action="/admin/property/add">
+        <!-- Basic Information -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Basic Information</h3>
+          
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+              Property Title *
+            </label>
+            <input 
+              type="text" 
+              id="title"
+              name="title" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., Luxury 3BHK Apartment in Bandra"
+            >
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+              Description *
+            </label>
+            <textarea 
+              id="description"
+              name="description" 
+              required
+              rows="4"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Describe the property..."
+            ></textarea>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="propertyType">
+                Property Type *
+              </label>
+              <select 
+                id="propertyType"
+                name="propertyType" 
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Type</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Villa">Villa</option>
+                <option value="Penthouse">Penthouse</option>
+                <option value="Row House">Row House</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Plot">Plot</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                Price (in ₹) *
+              </label>
+              <input 
+                type="number" 
+                id="price"
+                name="price" 
+                required
+                min="0"
+                step="100000"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., 7500000"
+              >
+            </div>
+          </div>
+        </div>
+        
+        <!-- Property Details -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Property Details</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="bedrooms">
+                Bedrooms *
+              </label>
+              <input 
+                type="number" 
+                id="bedrooms"
+                name="bedrooms" 
+                required
+                min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="bathrooms">
+                Bathrooms *
+              </label>
+              <input 
+                type="number" 
+                id="bathrooms"
+                name="bathrooms" 
+                required
+                min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="areaSqft">
+                Area (sq ft) *
+              </label>
+              <input 
+                type="number" 
+                id="areaSqft"
+                name="areaSqft" 
+                required
+                min="0"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+                Status *
+              </label>
+              <select 
+                id="status"
+                name="status" 
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="Active">Active</option>
+                <option value="Under Construction">Under Construction</option>
+                <option value="Sold">Sold</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">
+                Featured Property
+              </label>
+              <div class="flex items-center mt-3">
+                <input 
+                  type="checkbox" 
+                  id="featured"
+                  name="featured" 
+                  class="w-5 h-5 text-blue-600"
+                >
+                <label for="featured" class="ml-2 text-gray-700">Mark as Featured</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Location</h3>
+          
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+              Address *
+            </label>
+            <input 
+              type="text" 
+              id="address"
+              name="address" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Street address"
+            >
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                City *
+              </label>
+              <input 
+                type="text" 
+                id="city"
+                name="city" 
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="state">
+                State *
+              </label>
+              <input 
+                type="text" 
+                id="state"
+                name="state" 
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="pincode">
+                Pincode *
+              </label>
+              <input 
+                type="text" 
+                id="pincode"
+                name="pincode" 
+                required
+                pattern="[0-9]{6}"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+          </div>
+        </div>
+        
+        <!-- Amenities -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Amenities</h3>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="amenities">
+              Amenities (comma separated)
+            </label>
+            <input 
+              type="text" 
+              id="amenities"
+              name="amenities" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., Parking, Swimming Pool, Gym, Garden"
+            >
+          </div>
+        </div>
+        
+        <!-- Broker -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Broker Information</h3>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="brokerId">
+              Broker ID (optional)
+            </label>
+            <input 
+              type="number" 
+              id="brokerId"
+              name="brokerId" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., 1"
+            >
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="flex space-x-4">
+          <button 
+            type="submit" 
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+          >
+            Add Property
+          </button>
+          <a 
+            href="/admin/dashboard" 
+            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 inline-block"
+          >
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

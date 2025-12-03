@@ -1,0 +1,209 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Admin Header -->
+  <header class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Reports & Analytics</h1>
+        <p class="text-gray-600">Welcome, <%= adminUser %></p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="/admin/dashboard" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</a>
+        <a href="/admin/logout" class="text-red-600 hover:text-red-800">Logout</a>
+      </div>
+    </div>
+  </header>
+  
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <% if (locals.error) { %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <%= error %>
+      </div>
+    <% } %>
+    
+    <!-- Property Statistics -->
+    <div class="mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Property Statistics</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Total Properties</p>
+              <p class="text-3xl font-bold text-gray-800 mt-2"><%= stats.totalProperties || 0 %></p>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Active</p>
+              <p class="text-3xl font-bold text-green-600 mt-2"><%= stats.activeProperties || 0 %></p>
+            </div>
+            <div class="bg-green-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Under Construction</p>
+              <p class="text-3xl font-bold text-orange-600 mt-2"><%= stats.underConstructionProperties || 0 %></p>
+            </div>
+            <div class="bg-orange-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Sold</p>
+              <p class="text-3xl font-bold text-gray-600 mt-2"><%= stats.soldProperties || 0 %></p>
+            </div>
+            <div class="bg-gray-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Financial Overview -->
+    <div class="mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Financial Overview</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <p class="text-gray-500 text-sm font-semibold uppercase mb-2">Total Portfolio Value</p>
+          <p class="text-2xl font-bold text-blue-600">₹<%= ((stats.totalValue || 0) / 10000000).toFixed(2) %> Cr</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <p class="text-gray-500 text-sm font-semibold uppercase mb-2">Average Price</p>
+          <p class="text-2xl font-bold text-green-600">₹<%= ((stats.avgPrice || 0) / 100000).toFixed(2) %> Lacs</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <p class="text-gray-500 text-sm font-semibold uppercase mb-2">Highest Price</p>
+          <p class="text-2xl font-bold text-purple-600">₹<%= ((stats.maxPrice || 0) / 100000).toFixed(2) %> Lacs</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <p class="text-gray-500 text-sm font-semibold uppercase mb-2">Lowest Price</p>
+          <p class="text-2xl font-bold text-orange-600">₹<%= ((stats.minPrice || 0) / 100000).toFixed(2) %> Lacs</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Property Type Distribution -->
+    <% if (stats.propertyTypes && Object.keys(stats.propertyTypes).length > 0) { %>
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Property Type Distribution</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <% Object.entries(stats.propertyTypes).forEach(([type, count]) => { %>
+              <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <p class="text-3xl font-bold text-blue-600"><%= count %></p>
+                <p class="text-sm text-gray-600 mt-2"><%= type %></p>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+    
+    <!-- City Distribution -->
+    <% if (stats.cities && Object.keys(stats.cities).length > 0) { %>
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Properties by City</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <% Object.entries(stats.cities).forEach(([city, count]) => { %>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-semibold text-gray-700"><%= city %></span>
+                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold"><%= count %></span>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+    
+    <!-- Broker Statistics -->
+    <div class="mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Broker Statistics</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Total Brokers</p>
+              <p class="text-3xl font-bold text-gray-800 mt-2"><%= stats.totalBrokers || 0 %></p>
+            </div>
+            <div class="bg-purple-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Active Brokers</p>
+              <p class="text-3xl font-bold text-green-600 mt-2"><%= stats.activeBrokers || 0 %></p>
+            </div>
+            <div class="bg-green-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-semibold uppercase">Featured Properties</p>
+              <p class="text-3xl font-bold text-yellow-600 mt-2"><%= stats.featuredProperties || 0 %></p>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Export Options -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Export Reports</h2>
+      <div class="flex space-x-4">
+        <a href="/admin/reports/export/pdf" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 inline-block">
+          📄 Export to PDF
+        </a>
+        <a href="/admin/reports/export/excel" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 inline-block">
+          📊 Export to Excel
+        </a>
+        <button class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+          📧 Email Report
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

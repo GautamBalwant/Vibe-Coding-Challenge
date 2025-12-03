@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "reviewerId": 1,
+    "reviewerName": "Suresh Reddy",
+    "reviewerType": "buyer",
+    "targetId": 1,
+    "targetType": "agent",
+    "rating": 5,
+    "title": "Excellent service and professionalism",
+    "comment": "Rajesh helped me find the perfect home within my budget. Very patient and knowledgeable about the Mumbai market.",
+    "date": "2025-11-15",
+    "isVerified": true
+  },
+  {
+    "id": 2,
+    "reviewerId": 2,
+    "reviewerName": "Kavita Iyer",
+    "reviewerType": "buyer",
+    "targetId": 2,
+    "targetType": "agent",
+    "rating": 5,
+    "title": "Best agent in Bangalore",
+    "comment": "Priya's expertise in commercial properties is outstanding. Helped me secure a great deal on office space.",
+    "date": "2025-11-20",
+    "isVerified": true
+  },
+  {
+    "id": 3,
+    "reviewerId": 1,
+    "reviewerName": "Vikram Singh",
+    "reviewerType": "seller",
+    "targetId": 1,
+    "targetType": "builder",
+    "rating": 5,
+    "title": "Quality construction and timely delivery",
+    "comment": "Prestige Group delivered my apartment ahead of schedule with excellent build quality. Highly recommended!",
+    "date": "2025-10-05",
+    "isVerified": true
+  }
+]

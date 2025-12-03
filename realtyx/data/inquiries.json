@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "propertyId": 1,
+    "buyerId": 1,
+    "buyerName": "Suresh Reddy",
+    "buyerEmail": "suresh.buyer@gmail.com",
+    "buyerPhone": "9123456780",
+    "sellerId": 1,
+    "message": "Hi, I'm interested in this property. Can we schedule a visit this weekend?",
+    "inquiryDate": "2025-11-28T10:30:00Z",
+    "status": "responded",
+    "sellerResponse": "Sure! I'm available on Saturday at 11 AM. Looking forward to showing you the property.",
+    "responseDate": "2025-11-28T15:45:00Z"
+  },
+  {
+    "id": 2,
+    "propertyId": 5,
+    "buyerId": 2,
+    "buyerName": "Kavita Iyer",
+    "buyerEmail": "kavita.buyer@gmail.com",
+    "buyerPhone": "9123456781",
+    "sellerId": 2,
+    "message": "Is the price negotiable? I'm seriously interested.",
+    "inquiryDate": "2025-11-29T14:20:00Z",
+    "status": "new",
+    "sellerResponse": null,
+    "responseDate": null
+  }
+]

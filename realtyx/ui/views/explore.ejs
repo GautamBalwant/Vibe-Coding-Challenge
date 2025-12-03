@@ -1,0 +1,676 @@
+<h1 class="text-3xl font-bold mb-6">Explore All Properties</h1>
+
+<!-- Search and Filter Section -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+  <div id="filterForm" class="space-y-4">
+    <!-- Search Bar with Real-time Search -->
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="search">
+        Search Properties
+      </label>
+      <div class="relative">
+        <input 
+          type="text" 
+          id="search"
+          name="search" 
+          value="<%= filters.search || '' %>"
+          placeholder="Search by title, description, or location..."
+          class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <div id="searchSpinner" class="hidden absolute right-3 top-3">
+          <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filters Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- City Filter -->
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+          City
+        </label>
+        <select 
+          id="city"
+          name="city" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Cities</option>
+          <% if (filterOptions && filterOptions.cities) { %>
+            <% filterOptions.cities.forEach(function(city) { %>
+              <option value="<%= city %>" <%= filters.city === city ? 'selected' : '' %>><%= city %></option>
+            <% }); %>
+          <% } %>
+        </select>
+      </div>
+      
+      <!-- Property Type Filter -->
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="propertyType">
+          Property Type
+        </label>
+        <select 
+          id="propertyType"
+          name="propertyType" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Types</option>
+          <% if (filterOptions && filterOptions.propertyTypes) { %>
+            <% filterOptions.propertyTypes.forEach(function(type) { %>
+              <option value="<%= type %>" <%= filters.propertyType === type ? 'selected' : '' %>><%= type %></option>
+            <% }); %>
+          <% } %>
+        </select>
+      </div>
+      
+      <!-- Bedrooms Filter -->
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="bedrooms">
+          Bedrooms
+        </label>
+        <select 
+          id="bedrooms"
+          name="bedrooms" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Any</option>
+          <option value="1" <%= filters.bedrooms === '1' ? 'selected' : '' %>>1 BHK</option>
+          <option value="2" <%= filters.bedrooms === '2' ? 'selected' : '' %>>2 BHK</option>
+          <option value="3" <%= filters.bedrooms === '3' ? 'selected' : '' %>>3 BHK</option>
+          <option value="4" <%= filters.bedrooms === '4' ? 'selected' : '' %>>4 BHK</option>
+          <option value="5" <%= filters.bedrooms === '5' ? 'selected' : '' %>>5+ BHK</option>
+        </select>
+      </div>
+      
+      <!-- Status Filter -->
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+          Status
+        </label>
+        <select 
+          id="status"
+          name="status" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Status</option>
+          <% if (filterOptions && filterOptions.statuses) { %>
+            <% filterOptions.statuses.forEach(function(stat) { %>
+              <option value="<%= stat %>" <%= filters.status === stat ? 'selected' : '' %>><%= stat %></option>
+            <% }); %>
+          <% } %>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Price Range with Real-time Update -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="minPrice">
+          Min Price: <span id="minPriceDisplay">₹<%= filters.minPrice ? (filters.minPrice / 100000).toFixed(1) : '0' %> Lacs</span>
+        </label>
+        <input 
+          type="range" 
+          id="minPrice"
+          name="minPrice" 
+          value="<%= filters.minPrice || 0 %>"
+          min="0"
+          max="100000000"
+          step="500000"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        >
+      </div>
+      
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="maxPrice">
+          Max Price: <span id="maxPriceDisplay">₹<%= filters.maxPrice ? (filters.maxPrice / 100000).toFixed(1) : '1000' %> Lacs</span>
+        </label>
+        <input 
+          type="range" 
+          id="maxPrice"
+          name="maxPrice" 
+          value="<%= filters.maxPrice || 100000000 %>"
+          min="0"
+          max="100000000"
+          step="500000"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        >
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex space-x-4">
+      <button 
+        onclick="clearFilters()" 
+        type="button"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
+      >
+        Clear Filters
+      </button>
+      <div class="flex-1 text-right">
+        <span id="filterStatus" class="text-sm text-gray-500 italic"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results Count -->
+<div class="mb-4">
+  <p class="text-gray-600">
+    <span id="resultsCount" class="font-semibold"><%= pagination ? pagination.totalProperties : properties.length %></span> <span id="resultsText"><%= (pagination ? pagination.totalProperties : properties.length) === 1 ? 'property' : 'properties' %></span> found
+    <% if (pagination && pagination.totalPages > 1) { %>
+      <span style="color: #667eea; font-weight: 600; margin-left: 10px;">
+        (Page <%= pagination.currentPage %> of <%= pagination.totalPages %>)
+      </span>
+    <% } %>
+  </p>
+</div>
+
+<!-- Properties Grid -->
+<div id="propertiesGrid">
+  <% if (properties.length === 0) { %>
+    <div class="text-center py-12 bg-white rounded-lg shadow-lg">
+      <div class="text-6xl mb-4">🔍</div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">No Properties Found</h2>
+      <p class="text-gray-600 mb-6">Try adjusting your search filters</p>
+      <button onclick="clearFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+        View All Properties
+      </button>
+    </div>
+  <% } else { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% properties.forEach(function(property) { %>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <a href="/property/<%= property.id %>">
+            <!-- Property Image -->
+            <div class="relative h-48 bg-gray-200">
+              <% if (property.media && property.media.length > 0) { %>
+                <img 
+                  src="<%= property.media[0].url %>" 
+                  alt="<%= property.title %>"
+                  class="w-full h-full object-cover"
+                  onerror="this.src='https://via.placeholder.com/400x300?text=Property+Image'"
+                />
+              <% } else { %>
+                <img 
+                  src="https://via.placeholder.com/400x300?text=<%= property.propertyType %>" 
+                  alt="<%= property.title %>"
+                  class="w-full h-full object-cover"
+                />
+              <% } %>
+              <span class="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                <%= property.propertyType %>
+              </span>
+              <% if (property.featured) { %>
+                <span class="absolute top-2 left-2 bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">
+                  ★ Featured
+                </span>
+              <% } %>
+              <% if (property.status === 'Under Construction') { %>
+                <span class="absolute bottom-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Under Construction
+                </span>
+              <% } %>
+            </div>
+            
+            <div class="p-4">
+              <h2 class="text-xl font-bold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
+                <%= property.title %>
+              </h2>
+              
+              <p class="text-2xl font-bold text-blue-600 mb-2">
+                ₹<%= (property.price / 100000).toFixed(2) %> Lacs
+              </p>
+              
+              <p class="text-gray-600 text-sm mb-3">
+                📍 <%= property.address ? property.address.city + ', ' + property.address.state : 'Location not specified' %>
+              </p>
+              
+              <div class="flex items-center text-sm text-gray-600 mb-3 space-x-4">
+                <% if (property.bedrooms > 0) { %>
+                  <span>🛏️ <%= property.bedrooms %> BHK</span>
+                <% } %>
+                <% if (property.bathrooms > 0) { %>
+                  <span>🚿 <%= property.bathrooms %></span>
+                <% } %>
+                <% if (property.areaSqft > 0) { %>
+                  <span>📐 <%= property.areaSqft %> sqft</span>
+                <% } %>
+              </div>
+              
+              <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                <%= property.description.substring(0, 100) %><%= property.description.length > 100 ? '...' : '' %>
+              </p>
+              
+              <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-200">
+                View Details
+              </button>
+            </div>
+          </a>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<!-- Pagination Controls -->
+<% if (pagination && pagination.totalPages > 1) { %>
+  <div style="margin-top: 40px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <!-- Previous Button -->
+    <% if (pagination.hasPrevPage) { %>
+      <a href="?<%= Object.keys(filters).map(k => filters[k] ? k + '=' + encodeURIComponent(filters[k]) : '').filter(Boolean).join('&') %><%= Object.keys(filters).some(k => filters[k]) ? '&' : '' %>page=<%= pagination.currentPage - 1 %>" 
+         style="background: #667eea; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
+         onmouseover="this.style.background='#5568d3'"
+         onmouseout="this.style.background='#667eea'">
+        ← Previous
+      </a>
+    <% } else { %>
+      <span style="background: #e0e0e0; color: #999; padding: 10px 20px; border-radius: 8px; font-weight: 600;">
+        ← Previous
+      </span>
+    <% } %>
+
+    <!-- Page Numbers -->
+    <div style="display: flex; gap: 5px; align-items: center;">
+      <% 
+        const maxPagesToShow = 7;
+        let startPage = Math.max(1, pagination.currentPage - Math.floor(maxPagesToShow / 2));
+        let endPage = Math.min(pagination.totalPages, startPage + maxPagesToShow - 1);
+        
+        if (endPage - startPage < maxPagesToShow - 1) {
+          startPage = Math.max(1, endPage - maxPagesToShow + 1);
+        }
+      %>
+      
+      <% if (startPage > 1) { %>
+        <a href="?<%= Object.keys(filters).map(k => filters[k] ? k + '=' + encodeURIComponent(filters[k]) : '').filter(Boolean).join('&') %><%= Object.keys(filters).some(k => filters[k]) ? '&' : '' %>page=1" 
+           style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+           onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+           onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+          1
+        </a>
+        <% if (startPage > 2) { %>
+          <span style="padding: 10px 5px; color: #999;">...</span>
+        <% } %>
+      <% } %>
+      
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <% if (i === pagination.currentPage) { %>
+          <span style="background: #667eea; color: white; padding: 10px 15px; border-radius: 8px; font-weight: 600; border: 2px solid #667eea;">
+            <%= i %>
+          </span>
+        <% } else { %>
+          <a href="?<%= Object.keys(filters).map(k => filters[k] ? k + '=' + encodeURIComponent(filters[k]) : '').filter(Boolean).join('&') %><%= Object.keys(filters).some(k => filters[k]) ? '&' : '' %>page=<%= i %>" 
+             style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+             onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+             onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+            <%= i %>
+          </a>
+        <% } %>
+      <% } %>
+      
+      <% if (endPage < pagination.totalPages) { %>
+        <% if (endPage < pagination.totalPages - 1) { %>
+          <span style="padding: 10px 5px; color: #999;">...</span>
+        <% } %>
+        <a href="?<%= Object.keys(filters).map(k => filters[k] ? k + '=' + encodeURIComponent(filters[k]) : '').filter(Boolean).join('&') %><%= Object.keys(filters).some(k => filters[k]) ? '&' : '' %>page=<%= pagination.totalPages %>" 
+           style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+           onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+           onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+          <%= pagination.totalPages %>
+        </a>
+      <% } %>
+    </div>
+
+    <!-- Next Button -->
+    <% if (pagination.hasNextPage) { %>
+      <a href="?<%= Object.keys(filters).map(k => filters[k] ? k + '=' + encodeURIComponent(filters[k]) : '').filter(Boolean).join('&') %><%= Object.keys(filters).some(k => filters[k]) ? '&' : '' %>page=<%= pagination.currentPage + 1 %>" 
+         style="background: #667eea; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
+         onmouseover="this.style.background='#5568d3'"
+         onmouseout="this.style.background='#667eea'">
+        Next →
+      </a>
+    <% } else { %>
+      <span style="background: #e0e0e0; color: #999; padding: 10px 20px; border-radius: 8px; font-weight: 600;">
+        Next →
+      </span>
+    <% } %>
+  </div>
+
+  <!-- Pagination Info -->
+  <div style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
+    Showing <%= (pagination.currentPage - 1) * pagination.itemsPerPage + 1 %> - 
+    <%= Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalProperties) %> 
+    of <%= pagination.totalProperties %> properties
+    (Page <%= pagination.currentPage %> of <%= pagination.totalPages %>)
+  </div>
+<% } %>
+
+
+<!-- Real-time Filter JavaScript with Optimizations -->
+<script>
+  let searchTimeout;
+  let isSearching = false;
+  let allPropertiesCache = null; // Cache properties
+  let lastFetchTime = 0;
+  const CACHE_DURATION = 300000; // Cache for 5 minutes
+  const ITEMS_PER_PAGE = 500; // Fetch 500 at a time
+  
+  // Get all filter inputs
+  const searchInput = document.getElementById('search');
+  const citySelect = document.getElementById('city');
+  const propertyTypeSelect = document.getElementById('propertyType');
+  const bedroomsSelect = document.getElementById('bedrooms');
+  const statusSelect = document.getElementById('status');
+  const minPriceInput = document.getElementById('minPrice');
+  const maxPriceInput = document.getElementById('maxPrice');
+  
+  // Update price display
+  function updatePriceDisplay() {
+    const minPrice = parseInt(minPriceInput.value) || 0;
+    const maxPrice = parseInt(maxPriceInput.value) || 100000000;
+    
+    document.getElementById('minPriceDisplay').textContent = 
+      '₹' + (minPrice / 100000).toFixed(1) + ' Lacs';
+    document.getElementById('maxPriceDisplay').textContent = 
+      maxPrice >= 100000000 ? '₹1000+ Lacs' : '₹' + (maxPrice / 100000).toFixed(1) + ' Lacs';
+  }
+  
+  // Show loading spinner
+  function showLoading() {
+    isSearching = true;
+    document.getElementById('searchSpinner').classList.remove('hidden');
+    document.getElementById('filterStatus').textContent = 'Searching...';
+  }
+  
+  // Hide loading spinner
+  function hideLoading() {
+    isSearching = false;
+    document.getElementById('searchSpinner').classList.add('hidden');
+    document.getElementById('filterStatus').textContent = '';
+  }
+  
+  // Client-side filtering (MUCH FASTER)
+  function filterPropertiesClientSide(properties) {
+    const searchTerm = searchInput.value.toLowerCase();
+    const city = citySelect.value;
+    const propertyType = propertyTypeSelect.value;
+    const bedrooms = bedroomsSelect.value;
+    const status = statusSelect.value;
+    const minPrice = parseInt(minPriceInput.value) || 0;
+    const maxPrice = parseInt(maxPriceInput.value) || 100000000;
+    
+    return properties.filter(property => {
+      // Text search
+      if (searchTerm) {
+        const matchesSearch = 
+          (property.title && property.title.toLowerCase().includes(searchTerm)) ||
+          (property.description && property.description.toLowerCase().includes(searchTerm)) ||
+          (property.address?.city && property.address.city.toLowerCase().includes(searchTerm)) ||
+          (property.address?.state && property.address.state.toLowerCase().includes(searchTerm)) ||
+          (property.address?.line && property.address.line.toLowerCase().includes(searchTerm));
+        
+        if (!matchesSearch) return false;
+      }
+      
+      // City filter
+      if (city && property.address?.city !== city) return false;
+      
+      // Property type filter
+      if (propertyType && property.propertyType !== propertyType) return false;
+      
+      // Bedrooms filter
+      if (bedrooms) {
+        const bedroomNum = parseInt(bedrooms);
+        if (bedroomNum === 5 && property.bedrooms < 5) return false;
+        else if (bedroomNum !== 5 && property.bedrooms !== bedroomNum) return false;
+      }
+      
+      // Status filter
+      if (status && property.status !== status) return false;
+      
+      // Price range filter
+      if (property.price < minPrice || property.price > maxPrice) return false;
+      
+      return true;
+    });
+  }
+  
+  // Fetch properties with pagination (faster!)
+  async function fetchProperties() {
+    const now = Date.now();
+    
+    // Return cached data if fresh
+    if (allPropertiesCache && (now - lastFetchTime) < CACHE_DURATION) {
+      return allPropertiesCache;
+    }
+    
+    try {
+      // Fetch only the first batch for faster initial load
+      const response = await fetch(`/api/explore?limit=${ITEMS_PER_PAGE}`);
+      const data = await response.json();
+      allPropertiesCache = data.properties;
+      lastFetchTime = now;
+      
+      // Load more in background
+      loadMorePropertiesInBackground();
+      
+      return allPropertiesCache;
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+      return [];
+    }
+  }
+  
+  // Load remaining properties in the background
+  async function loadMorePropertiesInBackground() {
+    try {
+      // Fetch next batches
+      for (let page = 1; page <= 20; page++) {
+        const response = await fetch(`/api/explore?page=${page}&limit=${ITEMS_PER_PAGE}`);
+        const data = await response.json();
+        
+        if (data.properties.length === 0) break;
+        
+        allPropertiesCache = [...allPropertiesCache, ...data.properties];
+        
+        // Small delay between requests to not overwhelm the server
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      console.log(`Total properties loaded: ${allPropertiesCache.length}`);
+    } catch (error) {
+      console.error('Error loading more properties:', error);
+    }
+  }
+  
+  // Perform the search (OPTIMIZED)
+  async function performSearch() {
+    if (isSearching) return;
+    
+    showLoading();
+    const startTime = performance.now();
+    
+    try {
+      // Fetch properties (cached after first call)
+      const allProperties = await fetchProperties();
+      
+      // Filter client-side (FAST!)
+      const filteredProperties = filterPropertiesClientSide(allProperties);
+      
+      // Update results count
+      document.getElementById('resultsCount').textContent = filteredProperties.length;
+      document.getElementById('resultsText').textContent = 
+        filteredProperties.length === 1 ? 'property' : 'properties';
+      
+      // Update properties grid
+      updatePropertiesGrid(filteredProperties);
+      
+      // Build query string for URL
+      const params = new URLSearchParams();
+      if (searchInput.value) params.append('search', searchInput.value);
+      if (citySelect.value) params.append('city', citySelect.value);
+      if (propertyTypeSelect.value) params.append('propertyType', propertyTypeSelect.value);
+      if (bedroomsSelect.value) params.append('bedrooms', bedroomsSelect.value);
+      if (statusSelect.value) params.append('status', statusSelect.value);
+      if (minPriceInput.value && minPriceInput.value > 0) params.append('minPrice', minPriceInput.value);
+      if (maxPriceInput.value && maxPriceInput.value < 100000000) params.append('maxPrice', maxPriceInput.value);
+      
+      // Update URL without reload
+      const newUrl = `/explore${params.toString() ? '?' + params.toString() : ''}`;
+      window.history.pushState({}, '', newUrl);
+      
+      const endTime = performance.now();
+      console.log(`Search completed in ${(endTime - startTime).toFixed(2)}ms`);
+      
+      hideLoading();
+    } catch (error) {
+      console.error('Search error:', error);
+      hideLoading();
+      document.getElementById('filterStatus').textContent = 'Error loading results';
+    }
+  }
+  
+  // Debounced search function (100ms for ultra-fast response)
+  function debouncedSearch() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(performSearch, 100);
+  }
+  
+  // Update properties grid HTML (optimized rendering)
+  function updatePropertiesGrid(properties) {
+    const grid = document.getElementById('propertiesGrid');
+    
+    if (properties.length === 0) {
+      grid.innerHTML = `
+        <div class="text-center py-12 bg-white rounded-lg shadow-lg">
+          <div class="text-6xl mb-4">🔍</div>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">No Properties Found</h2>
+          <p class="text-gray-600 mb-6">Try adjusting your search filters</p>
+          <button onclick="clearFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+            View All Properties
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    // Limit display to first 50 properties for ultra-fast rendering
+    const displayProperties = properties.slice(0, 50);
+    const hasMore = properties.length > 50;
+    
+    let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
+    
+    displayProperties.forEach(property => {
+      const imageUrl = property.media && property.media.length > 0 
+        ? property.media[0].url 
+        : `https://via.placeholder.com/400x300?text=${encodeURIComponent(property.propertyType)}`;
+      
+      const title = (property.title || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      const description = (property.description || '').substring(0, 100);
+      
+      html += `
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <a href="/property/${property.id}">
+            <div class="relative h-48 bg-gray-200">
+              <img 
+                src="${imageUrl}" 
+                alt="${title}"
+                class="w-full h-full object-cover"
+                onerror="this.src='https://via.placeholder.com/400x300?text=Property+Image'"
+                loading="lazy"
+              />
+              <span class="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                ${property.propertyType || 'Property'}
+              </span>
+              ${property.featured ? '<span class="absolute top-2 left-2 bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">★ Featured</span>' : ''}
+              ${property.status === 'Under Construction' ? '<span class="absolute bottom-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">Under Construction</span>' : ''}
+            </div>
+            
+            <div class="p-4">
+              <h2 class="text-xl font-bold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
+                ${title}
+              </h2>
+              
+              <p class="text-2xl font-bold text-blue-600 mb-2">
+                ₹${(property.price / 100000).toFixed(2)} Lacs
+              </p>
+              
+              <p class="text-gray-600 text-sm mb-3">
+                📍 ${property.address ? property.address.city + ', ' + property.address.state : 'Location not specified'}
+              </p>
+              
+              <div class="flex items-center text-sm text-gray-600 mb-3 space-x-4">
+                ${property.bedrooms > 0 ? `<span>🛏️ ${property.bedrooms} BHK</span>` : ''}
+                ${property.bathrooms > 0 ? `<span>🚿 ${property.bathrooms}</span>` : ''}
+                ${property.areaSqft > 0 ? `<span>📐 ${property.areaSqft} sqft</span>` : ''}
+              </div>
+              
+              <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                ${description}${description.length >= 100 ? '...' : ''}
+              </p>
+              
+              <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-200">
+                View Details
+              </button>
+            </div>
+          </a>
+        </div>
+      `;
+    });
+    
+    html += '</div>';
+    
+    // Show "load more" message if there are more properties
+    if (hasMore) {
+      html += `
+        <div class="mt-6 text-center py-4 bg-blue-50 rounded-lg">
+          <p class="text-gray-700">
+            Showing first 50 of <span class="font-bold">${properties.length}</span> matching properties. 
+            <span class="font-semibold">Refine your search to see more specific results.</span>
+          </p>
+        </div>
+      `;
+    }
+    
+    grid.innerHTML = html;
+  }
+  
+  // Clear all filters
+  function clearFilters() {
+    searchInput.value = '';
+    citySelect.value = '';
+    propertyTypeSelect.value = '';
+    bedroomsSelect.value = '';
+    statusSelect.value = '';
+    minPriceInput.value = 0;
+    maxPriceInput.value = 100000000;
+    updatePriceDisplay();
+    performSearch();
+  }
+  
+  // Add event listeners
+  searchInput.addEventListener('input', debouncedSearch);
+  citySelect.addEventListener('change', performSearch);
+  propertyTypeSelect.addEventListener('change', performSearch);
+  bedroomsSelect.addEventListener('change', performSearch);
+  statusSelect.addEventListener('change', performSearch);
+  minPriceInput.addEventListener('input', () => {
+    updatePriceDisplay();
+    debouncedSearch();
+  });
+  maxPriceInput.addEventListener('input', () => {
+    updatePriceDisplay();
+    debouncedSearch();
+  });
+  
+  // Initialize price display
+  updatePriceDisplay();
+  
+  // Pre-load first batch on page load (500 properties loads FAST)
+  fetchProperties().then(() => {
+    console.log('Initial properties loaded - search is ready!');
+  });
+</script>
+

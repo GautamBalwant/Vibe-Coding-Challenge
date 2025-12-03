@@ -1,0 +1,227 @@
+<!-- Directory Page - Search Builders, Agents, Sellers -->
+<div style="padding: 30px 5%; max-width: 1400px; margin: 0 auto;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="font-size: 42px; font-weight: bold; color: #333; margin-bottom: 15px;">🔍 Professional Directory</h1>
+        <p style="font-size: 18px; color: #666;">Find trusted builders, agents, and sellers</p>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <form method="GET" action="/directory">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end;">
+                <!-- Search Input -->
+                <div>
+                    <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Search</label>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="<%= searchQuery %>"
+                        placeholder="Name, company, specialization..."
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;"
+                    >
+                </div>
+
+                <!-- Role Filter -->
+                <div>
+                    <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Role</label>
+                    <select 
+                        name="role" 
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;"
+                    >
+                        <option value="all" <%= roleFilter === 'all' ? 'selected' : '' %>>All Professionals</option>
+                        <option value="builder" <%= roleFilter === 'builder' ? 'selected' : '' %>>Builders</option>
+                        <option value="agent" <%= roleFilter === 'agent' ? 'selected' : '' %>>Agents</option>
+                        <option value="seller" <%= roleFilter === 'seller' ? 'selected' : '' %>>Sellers</option>
+                    </select>
+                </div>
+
+                <!-- Specialization Filter (for agents) -->
+                <div>
+                    <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Specialization</label>
+                    <select 
+                        name="specialization" 
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;"
+                    >
+                        <option value="">All Specializations</option>
+                        <option value="Luxury Residential" <%= specializationFilter === 'Luxury Residential' ? 'selected' : '' %>>Luxury Residential</option>
+                        <option value="Commercial" <%= specializationFilter === 'Commercial' ? 'selected' : '' %>>Commercial</option>
+                        <option value="Affordable Housing" <%= specializationFilter === 'Affordable Housing' ? 'selected' : '' %>>Affordable Housing</option>
+                    </select>
+                </div>
+
+                <!-- Search Button -->
+                <div>
+                    <button 
+                        type="submit" 
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;"
+                        onmouseover="this.style.transform='translateY(-2px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
+                    >
+                        🔍 Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Summary -->
+    <div style="margin-bottom: 30px;">
+        <h2 style="font-size: 24px; color: #333; font-weight: 600;">
+            Results: 
+            <span style="color: #667eea;"><%= builders.length + agents.length + sellers.length %></span> 
+            professionals found
+        </h2>
+    </div>
+
+    <!-- Builders Section -->
+    <% if (builders.length > 0) { %>
+        <div style="margin-bottom: 50px;">
+            <h3 style="font-size: 28px; color: #333; font-weight: bold; margin-bottom: 25px; border-bottom: 3px solid #667eea; padding-bottom: 10px;">
+                🏗️ Builders (<%= builders.length %>)
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+                <% builders.forEach(builder => { %>
+                    <a href="/builder/<%= builder.id %>" style="text-decoration: none; color: inherit;">
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: all 0.3s; border: 2px solid #f0f0f0;" onmouseover="this.style.borderColor='#667eea'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#f0f0f0'; this.style.transform='translateY(0)'">
+                            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                                <% if (builder.logo) { %>
+                                    <img src="<%= builder.logo %>" alt="<%= builder.companyName %>" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <% } else { %>
+                                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;">
+                                        <%= builder.companyName.charAt(0) %>
+                                    </div>
+                                <% } %>
+                                <div style="flex: 1;">
+                                    <h4 style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 5px;"><%= builder.companyName %></h4>
+                                    <div style="display: flex; align-items: center; gap: 5px; color: #ffa500;">
+                                        <span style="font-size: 18px;">⭐</span>
+                                        <span style="font-weight: 600;"><%= builder.rating %></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <%= builder.description %>
+                            </p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                                <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #667eea;"><%= builder.totalProjects || 0 %></div>
+                                    <div style="color: #666; font-size: 12px;">Projects</div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #28a745;"><%= builder.completedProjects || 0 %></div>
+                                    <div style="color: #666; font-size: 12px;">Completed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Agents Section -->
+    <% if (agents.length > 0) { %>
+        <div style="margin-bottom: 50px;">
+            <h3 style="font-size: 28px; color: #333; font-weight: bold; margin-bottom: 25px; border-bottom: 3px solid #667eea; padding-bottom: 10px;">
+                👔 Real Estate Agents (<%= agents.length %>)
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+                <% agents.forEach(agent => { %>
+                    <a href="/agent/<%= agent.id %>" style="text-decoration: none; color: inherit;">
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: all 0.3s; border: 2px solid #f0f0f0;" onmouseover="this.style.borderColor='#667eea'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#f0f0f0'; this.style.transform='translateY(0)'">
+                            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                                <% if (agent.profileImage) { %>
+                                    <img src="<%= agent.profileImage %>" alt="<%= agent.name %>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea;">
+                                <% } else { %>
+                                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;">
+                                        <%= agent.name.charAt(0) %>
+                                    </div>
+                                <% } %>
+                                <div style="flex: 1;">
+                                    <h4 style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 5px;"><%= agent.name %></h4>
+                                    <div style="color: #667eea; font-size: 14px; font-weight: 600; margin-bottom: 5px;">
+                                        <%= agent.specialization %>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 5px; color: #ffa500;">
+                                        <span style="font-size: 16px;">⭐</span>
+                                        <span style="font-weight: 600; font-size: 14px;"><%= agent.rating %></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <%= agent.bio %>
+                            </p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; font-size: 14px;">
+                                <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #667eea;"><%= agent.yearsOfExperience || 0 %></div>
+                                    <div style="color: #666; font-size: 11px;">Years Exp</div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #28a745;"><%= agent.totalSales || 0 %></div>
+                                    <div style="color: #666; font-size: 11px;">Sales</div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #f5576c;"><%= agent.activeListings || 0 %></div>
+                                    <div style="color: #666; font-size: 11px;">Listings</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Sellers Section -->
+    <% if (sellers.length > 0) { %>
+        <div style="margin-bottom: 50px;">
+            <h3 style="font-size: 28px; color: #333; font-weight: bold; margin-bottom: 25px; border-bottom: 3px solid #667eea; padding-bottom: 10px;">
+                💼 Property Sellers (<%= sellers.length %>)
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+                <% sellers.forEach(seller => { %>
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 2px solid #f0f0f0;">
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+                            <% if (seller.profileImage) { %>
+                                <img src="<%= seller.profileImage %>" alt="<%= seller.name %>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea;">
+                            <% } else { %>
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;">
+                                    <%= seller.name.charAt(0) %>
+                                </div>
+                            <% } %>
+                            <div style="flex: 1;">
+                                <h4 style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 5px;"><%= seller.name %></h4>
+                                <div style="color: #666; font-size: 14px;">
+                                    📧 <%= seller.email %>
+                                </div>
+                                <div style="color: #666; font-size: 14px;">
+                                    📞 <%= seller.phone %>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                            <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                <div style="font-weight: bold; color: #667eea;"><%= seller.activeListings || 0 %></div>
+                                <div style="color: #666; font-size: 12px;">Active Listings</div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center;">
+                                <div style="font-weight: bold; color: #28a745;"><%= seller.totalPropertiesSold || 0 %></div>
+                                <div style="color: #666; font-size: 12px;">Properties Sold</div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- No Results Message -->
+    <% if (builders.length === 0 && agents.length === 0 && sellers.length === 0) { %>
+        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <div style="font-size: 64px; margin-bottom: 20px;">🔍</div>
+            <h3 style="font-size: 24px; color: #666; margin-bottom: 10px;">No results found</h3>
+            <p style="color: #999;">Try adjusting your search filters</p>
+        </div>
+    <% } %>
+</div>

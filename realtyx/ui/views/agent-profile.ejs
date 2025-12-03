@@ -1,0 +1,125 @@
+<div class="agent-profile-container" style="padding: 30px 5%; max-width: 1200px; margin: 0 auto;">
+    <!-- Agent Header -->
+    <div class="agent-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 40px; color: white; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); position: relative;">
+        <div style="position: absolute; top: 20px; right: 40px; display: flex; gap: 10px;">
+            <a href="/" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: 2px solid rgba(255,255,255,0.3);" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                🏠 Home
+            </a>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/auth/logout" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: 2px solid rgba(255,255,255,0.3);" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    🚪 Logout
+                </a>
+            <% } else { %>
+                <a href="/auth/login" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: 2px solid rgba(255,255,255,0.3);" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    🔐 Login
+                </a>
+            <% } %>
+        </div>
+        <div style="display: flex; align-items: center; gap: 30px; padding-right: 250px;">
+            <% if (agent.profileImage) { %>
+                <img src="<%= agent.profileImage %>" alt="<%= agent.name %>" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 5px solid white;">
+            <% } else { %>
+                <div style="width: 140px; height: 140px; background: white; color: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 56px; font-weight: bold; border: 5px solid white;">
+                    <%= agent.name.charAt(0) %>
+                </div>
+            <% } %>
+            <div style="flex: 1;">
+                <h1 style="margin: 0 0 10px 0; font-size: 36px;"><%= agent.name %></h1>
+                <p style="margin: 5px 0; opacity: 0.9; font-size: 18px;"><strong><%= agent.specialization %></strong></p>
+                <p style="margin: 5px 0; opacity: 0.9;"><%= agent.yearsOfExperience %> years of experience</p>
+                <p style="margin: 5px 0; opacity: 0.9;">📞 <%= agent.phone %> | ✉️ <%= agent.email %></p>
+                <p style="margin: 5px 0; opacity: 0.9; font-size: 14px;">License: <%= agent.licenseNumber %></p>
+                
+                <div style="display: flex; align-items: center; gap: 15px; margin-top: 15px;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; display: flex; align-items: center; gap: 5px;">
+                        <span style="color: gold; font-size: 22px;">★</span>
+                        <span style="font-size: 22px; font-weight: bold;"><%= agent.rating ? agent.rating.toFixed(1) : 'N/A' %></span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px;">
+                        <strong><%= agent.totalSales || 0 %></strong> Properties Sold
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px;">
+                        <strong><%= agent.activeListings || 0 %></strong> Active Listings
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Bio -->
+    <% if (agent.bio) { %>
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h2 style="margin-top: 0; color: #333;">About <%= agent.name %></h2>
+            <p style="line-height: 1.8; color: #666; font-size: 16px;"><%= agent.bio %></p>
+        </div>
+    <% } %>
+
+    <!-- Agent Properties -->
+    <% if (properties && properties.length > 0) { %>
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h2 style="margin-top: 0; color: #333; margin-bottom: 25px;">Properties Handled (<%= properties.length %>)</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                <% properties.slice(0, 6).forEach(property => { %>
+                    <a href="/property/<%= property.id %>" style="text-decoration: none; color: inherit;">
+                        <div style="border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <% if (property.media && property.media.length > 0) { %>
+                                <img src="<%= property.media[0].url %>" alt="<%= property.title %>" style="width: 100%; height: 180px; object-fit: cover;">
+                            <% } %>
+                            <div style="padding: 15px;">
+                                <h4 style="margin: 0 0 10px 0; color: #333; font-size: 16px;"><%= property.title %></h4>
+                                <p style="color: #667eea; font-size: 20px; font-weight: bold; margin: 5px 0;">₹<%= property.price.toLocaleString() %></p>
+                                <p style="margin: 5px 0; color: #666; font-size: 14px;"><%= property.bedrooms %> BHK • <%= property.areaSqft %> sq.ft</p>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            </div>
+            <% if (properties.length > 6) { %>
+                <div style="text-align: center; margin-top: 25px;">
+                    <a href="/explore?agentId=<%= agent.id %>" style="background: #667eea; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; display: inline-block;">View All Properties</a>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+
+    <!-- Reviews Section -->
+    <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <h2 style="margin-top: 0; color: #333; margin-bottom: 25px;">Client Reviews (<%= reviews.length %>)</h2>
+        <% if (reviews && reviews.length > 0) { %>
+            <div style="display: grid; gap: 20px;">
+                <% reviews.forEach(review => { %>
+                    <div style="border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; background: #fafafa;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: bold; color: #333; font-size: 16px;"><%= review.reviewerName %></div>
+                                <div style="color: #999; font-size: 13px;"><%= review.reviewerType === 'buyer' ? '🏡 Buyer' : '💼 Seller' %></div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <% for (let i = 0; i < 5; i++) { %>
+                                    <span style="color: <%= i < review.rating ? 'gold' : '#ddd' %>; font-size: 18px;">★</span>
+                                <% } %>
+                                <% if (review.isVerified) { %>
+                                    <span style="background: #28a745; color: white; padding: 3px 8px; border-radius: 5px; font-size: 11px; margin-left: 10px;">✓ Verified</span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% if (review.title) { %>
+                            <h4 style="margin: 10px 0; color: #333;"><%= review.title %></h4>
+                        <% } %>
+                        <p style="color: #666; line-height: 1.6; margin: 10px 0;"><%= review.comment %></p>
+                        <div style="color: #999; font-size: 12px; margin-top: 10px;"><%= review.date %></div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p style="color: #999; text-align: center; padding: 40px;">No reviews yet.</p>
+        <% } %>
+        
+        <!-- Add Review Button -->
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="alert('Review submission feature coming soon!')" style="background: #667eea; color: white; padding: 12px 30px; border-radius: 8px; border: none; font-size: 16px; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
+                Write a Review
+            </button>
+        </div>
+    </div>
+</div>

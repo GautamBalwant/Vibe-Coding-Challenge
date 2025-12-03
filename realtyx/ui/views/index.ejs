@@ -1,0 +1,355 @@
+<!-- Hero Section with Search -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-xl p-8 mb-8">
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 15px; gap: 10px;">
+    <% if (user) { %>
+      <!-- User is logged in -->
+      <div style="background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 8px; font-weight: 600;">
+        👋 Welcome, <%= user.name %>
+      </div>
+      <% if (user.role === 'buyer') { %>
+        <a href="/buyer/dashboard" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+          📊 My Dashboard
+        </a>
+      <% } else if (user.role === 'seller') { %>
+        <a href="/seller/dashboard" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+          📊 My Dashboard
+        </a>
+      <% } else if (user.role === 'agent') { %>
+        <a href="/agent/<%= user.id %>" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+          📊 My Profile
+        </a>
+      <% } %>
+      <a href="/auth/logout" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        🚪 Logout
+      </a>
+    <% } else { %>
+      <!-- User is not logged in -->
+      <a href="/auth/login" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        🔐 Login
+      </a>
+      <a href="/auth/signup/buyer" style="background: white; color: #667eea; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='white'">
+        ✨ Sign Up
+      </a>
+    <% } %>
+  </div>
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-bold mb-2">Find Your Dream Property</h1>
+    <p class="text-xl">Search from thousands of properties across India</p>
+  </div>
+  
+  <!-- Quick Search Form -->
+  <form method="GET" action="/explore" class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg p-4 shadow-lg">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <input 
+          type="text" 
+          name="search" 
+          placeholder="Search properties..."
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+        >
+        <select 
+          name="city" 
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+        >
+          <option value="">All Cities</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Pune">Pune</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Hyderabad">Hyderabad</option>
+        </select>
+        <select 
+          name="propertyType" 
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+        >
+          <option value="">All Types</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Villa">Villa</option>
+          <option value="Penthouse">Penthouse</option>
+          <option value="Commercial">Commercial</option>
+        </select>
+        <button 
+          type="submit" 
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
+        >
+          🔍 Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+  <h2 class="text-3xl font-bold">All Properties</h2>
+  <% if (pagination && pagination.totalProperties > 0) { %>
+    <p style="color: #666; font-size: 16px;">
+      <span style="font-weight: 600; color: #667eea;"><%= pagination.totalProperties %></span> properties available
+      <% if (pagination.totalPages > 1) { %>
+        <span style="margin-left: 10px; font-weight: 600;">
+          | Page <%= pagination.currentPage %> of <%= pagination.totalPages %>
+        </span>
+      <% } %>
+    </p>
+  <% } %>
+</div>
+
+<% if (properties.length === 0) { %>
+  <p class="text-gray-500 text-center py-8">No properties available at the moment.</p>
+<% } else { %>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% properties.forEach(function(property) { %>
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="/property/<%= property.id %>">
+          <!-- Property Image -->
+          <div class="relative h-48 bg-gray-200">
+            <% if (property.media && property.media.length > 0) { %>
+              <img 
+                src="https://picsum.photos/seed/<%= property.id %>/400/300" 
+                alt="<%= property.media[0].altText || property.title %>"
+                class="w-full h-full object-cover"
+                onerror="this.src='https://via.placeholder.com/400x300?text=Property+Image'"
+              />
+            <% } else { %>
+              <img 
+                src="https://via.placeholder.com/400x300?text=<%= property.propertyType %>" 
+                alt="<%= property.title %>"
+                class="w-full h-full object-cover"
+              />
+            <% } %>
+            <!-- Property Type Badge -->
+            <span class="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+              <%= property.propertyType %>
+            </span>
+            <!-- Featured Badge -->
+            <% if (property.featured) { %>
+              <span class="absolute top-2 left-2 bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">
+                ★ Featured
+              </span>
+            <% } %>
+          </div>
+          
+          <!-- Property Details -->
+          <div class="p-4">
+            <h2 class="text-xl font-bold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
+              <%= property.title %>
+            </h2>
+            
+            <!-- Price -->
+            <p class="text-2xl font-bold text-blue-600 mb-2">
+              ₹<%= (property.price / 100000).toFixed(2) %> Lacs
+            </p>
+            
+            <!-- Location -->
+            <p class="text-gray-600 text-sm mb-3">
+              <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <%= property.address ? property.address.city + ', ' + property.address.state : 'Location not specified' %>
+            </p>
+            
+            <!-- Property Info -->
+            <div class="flex items-center text-sm text-gray-600 mb-3 space-x-4">
+              <% if (property.bedrooms > 0) { %>
+                <span>🛏️ <%= property.bedrooms %> BHK</span>
+              <% } %>
+              <% if (property.bathrooms > 0) { %>
+                <span>🚿 <%= property.bathrooms %> Bath</span>
+              <% } %>
+              <% if (property.areaSqft > 0) { %>
+                <span>📐 <%= property.areaSqft %> sqft</span>
+              <% } %>
+            </div>
+            
+            <!-- Description -->
+            <p class="text-gray-600 text-sm line-clamp-2 mb-3">
+              <%= property.description.substring(0, 100) %><%= property.description.length > 100 ? '...' : '' %>
+            </p>
+            
+            <!-- Amenities -->
+            <% if (property.amenities && property.amenities.length > 0) { %>
+              <div class="flex flex-wrap gap-1 mb-3">
+                <% property.amenities.slice(0, 3).forEach(function(amenity) { %>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                    <%= amenity %>
+                  </span>
+                <% }); %>
+                <% if (property.amenities.length > 3) { %>
+                  <span class="text-gray-500 text-xs px-2 py-1">
+                    +<%= property.amenities.length - 3 %> more
+                  </span>
+                <% } %>
+              </div>
+            <% } %>
+            
+            <!-- View Details Button -->
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-200">
+              View Details
+            </button>
+          </div>
+        </a>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<!-- Pagination Controls -->
+<% if (pagination && pagination.totalPages > 1) { %>
+  <div style="margin-top: 40px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <!-- Previous Button -->
+    <% if (pagination.hasPrevPage) { %>
+      <a href="?page=<%= pagination.currentPage - 1 %>" 
+         style="background: #667eea; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
+         onmouseover="this.style.background='#5568d3'"
+         onmouseout="this.style.background='#667eea'">
+        ← Previous
+      </a>
+    <% } else { %>
+      <span style="background: #e0e0e0; color: #999; padding: 10px 20px; border-radius: 8px; font-weight: 600;">
+        ← Previous
+      </span>
+    <% } %>
+
+    <!-- Page Numbers -->
+    <div style="display: flex; gap: 5px; align-items: center;">
+      <% 
+        const maxPagesToShow = 7;
+        let startPage = Math.max(1, pagination.currentPage - Math.floor(maxPagesToShow / 2));
+        let endPage = Math.min(pagination.totalPages, startPage + maxPagesToShow - 1);
+        
+        if (endPage - startPage < maxPagesToShow - 1) {
+          startPage = Math.max(1, endPage - maxPagesToShow + 1);
+        }
+      %>
+      
+      <% if (startPage > 1) { %>
+        <a href="?page=1" 
+           style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+           onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+           onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+          1
+        </a>
+        <% if (startPage > 2) { %>
+          <span style="padding: 10px 5px; color: #999;">...</span>
+        <% } %>
+      <% } %>
+      
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <% if (i === pagination.currentPage) { %>
+          <span style="background: #667eea; color: white; padding: 10px 15px; border-radius: 8px; font-weight: 600; border: 2px solid #667eea;">
+            <%= i %>
+          </span>
+        <% } else { %>
+          <a href="?page=<%= i %>" 
+             style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+             onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+             onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+            <%= i %>
+          </a>
+        <% } %>
+      <% } %>
+      
+      <% if (endPage < pagination.totalPages) { %>
+        <% if (endPage < pagination.totalPages - 1) { %>
+          <span style="padding: 10px 5px; color: #999;">...</span>
+        <% } %>
+        <a href="?page=<%= pagination.totalPages %>" 
+           style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s;"
+           onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea'"
+           onmouseout="this.style.borderColor='#e0e0e0'; this.style.color='#333'">
+          <%= pagination.totalPages %>
+        </a>
+      <% } %>
+    </div>
+
+    <!-- Next Button -->
+    <% if (pagination.hasNextPage) { %>
+      <a href="?page=<%= pagination.currentPage + 1 %>" 
+         style="background: #667eea; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
+         onmouseover="this.style.background='#5568d3'"
+         onmouseout="this.style.background='#667eea'">
+        Next →
+      </a>
+    <% } else { %>
+      <span style="background: #e0e0e0; color: #999; padding: 10px 20px; border-radius: 8px; font-weight: 600;">
+        Next →
+      </span>
+    <% } %>
+  </div>
+
+  <!-- Pagination Info -->
+  <div style="text-align: center; margin-bottom: 40px; color: #666; font-size: 14px;">
+    Showing <%= (pagination.currentPage - 1) * pagination.itemsPerPage + 1 %> - 
+    <%= Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalProperties) %> 
+    of <%= pagination.totalProperties %> properties
+    (Page <%= pagination.currentPage %> of <%= pagination.totalPages %>)
+  </div>
+<% } %>
+
+<!-- Browse Professionals Section -->
+<div class="mt-12 mb-8">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h2 class="text-3xl font-bold mb-3">Find Trusted Professionals</h2>
+    <p class="text-lg text-gray-600 mb-6">Connect with experienced builders, agents, and sellers</p>
+    <a 
+      href="/directory" 
+      style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 18px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);"
+      onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.5)'"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)'"
+    >
+      🔍 Browse Professional Directory
+    </a>
+  </div>
+</div>
+
+<!-- Role-Based Dashboards Section -->
+<div class="mt-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-xl p-8 text-white">
+  <h2 class="text-3xl font-bold mb-6 text-center">Access Your Dashboard</h2>
+  <p class="text-center mb-8 text-lg">Explore role-specific features for builders, agents, buyers, and sellers</p>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Builder Profile -->
+    <a href="/builder/1" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-6 text-center transition-all duration-200 backdrop-blur-sm">
+      <div class="text-5xl mb-3">🏗️</div>
+      <h3 class="text-xl font-bold mb-2">Builder Profile</h3>
+      <p class="text-sm opacity-90">View projects, ratings, and completed work</p>
+    </a>
+    
+    <!-- Agent Profile -->
+    <a href="/agent/1" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-6 text-center transition-all duration-200 backdrop-blur-sm">
+      <div class="text-5xl mb-3">👔</div>
+      <h3 class="text-xl font-bold mb-2">Agent Profile</h3>
+      <p class="text-sm opacity-90">Check agent reviews and listings</p>
+    </a>
+    
+    <!-- Buyer Dashboard -->
+    <a href="/auth/login?role=buyer" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-6 text-center transition-all duration-200 backdrop-blur-sm">
+      <div class="text-5xl mb-3">🏡</div>
+      <h3 class="text-xl font-bold mb-2">Buyer Dashboard</h3>
+      <p class="text-sm opacity-90">Login to manage preferences and saved properties</p>
+    </a>
+    
+    <!-- Seller Dashboard -->
+    <a href="/auth/login?role=seller" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-6 text-center transition-all duration-200 backdrop-blur-sm">
+      <div class="text-5xl mb-3">💼</div>
+      <h3 class="text-xl font-bold mb-2">Seller Dashboard</h3>
+      <p class="text-sm opacity-90">Login to view inquiries and manage listings</p>
+    </a>
+  </div>
+  
+  <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.3);">
+    <p style="margin-bottom: 15px; font-size: 16px;">New to RealtyX?</p>
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+      <a href="/auth/signup/buyer" style="background: white; color: #667eea; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+        🏡 Register as Buyer
+      </a>
+      <a href="/auth/signup/seller" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 2px solid white; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        💼 Register as Seller
+      </a>
+      <a href="/auth/signup/agent" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 2px solid white; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        👔 Register as Agent
+      </a>
+    </div>
+  </div>
+</div>
+

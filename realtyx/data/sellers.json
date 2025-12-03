@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "name": "Vikram Singh",
+    "email": "vikram.seller@gmail.com",
+    "phone": "9234567890",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "profileImage": "https://i.pravatar.cc/150?img=60",
+    "isActive": true,
+    "registeredDate": "2025-09-10",
+    "propertyIds": [1, 15, 23],
+    "totalPropertiesSold": 2,
+    "activeListings": 3
+  },
+  {
+    "id": 2,
+    "name": "Anjali Mehta",
+    "email": "anjali.seller@gmail.com",
+    "phone": "9234567891",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "profileImage": "https://i.pravatar.cc/150?img=47",
+    "isActive": true,
+    "registeredDate": "2025-08-20",
+    "propertyIds": [5, 12],
+    "totalPropertiesSold": 1,
+    "activeListings": 2
+  }
+]

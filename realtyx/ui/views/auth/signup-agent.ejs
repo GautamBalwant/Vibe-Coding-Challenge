@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Signup - RealtyX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+</head>
+<body>
+<div class="min-h-screen flex items-center justify-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 550px; width: 100%; padding: 50px 40px;">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 36px; font-weight: bold; color: #667eea; margin-bottom: 10px;">👔 Agent Signup</h1>
+            <p style="color: #666; font-size: 16px;">Create your agent account</p>
+        </div>
+
+        <!-- Error Message -->
+        <% if (error) { %>
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px;">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Signup Form -->
+        <form method="POST" action="/auth/signup/agent">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Full Name *</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        required
+                        placeholder="John Doe"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                </div>
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Phone *</label>
+                    <input 
+                        type="tel" 
+                        name="phone" 
+                        required
+                        placeholder="9876543210"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Email Address *</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    required
+                    placeholder="your.email@example.com"
+                    style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                >
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Password *</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        required
+                        minlength="6"
+                        placeholder="••••••••"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                </div>
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Confirm Password *</label>
+                    <input 
+                        type="password" 
+                        name="confirmPassword" 
+                        required
+                        minlength="6"
+                        placeholder="••••••••"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin: 0 0 15px 0; font-size: 18px;">Professional Information</h3>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">License Number *</label>
+                    <input 
+                        type="text" 
+                        name="licenseNumber" 
+                        required
+                        placeholder="RERA-MH-2020-12345"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                    <small style="color: #999;">Your real estate license number</small>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Specialization *</label>
+                    <select 
+                        name="specialization" 
+                        required
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; background: white;"
+                    >
+                        <option value="">Select specialization</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Luxury Residential">Luxury Residential</option>
+                        <option value="Affordable Housing">Affordable Housing</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Land/Plot">Land/Plot</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Years of Experience *</label>
+                    <input 
+                        type="number" 
+                        name="yearsOfExperience" 
+                        required
+                        min="0"
+                        max="50"
+                        placeholder="5"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;"
+                    >
+                </div>
+
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Bio (Optional)</label>
+                    <textarea 
+                        name="bio" 
+                        rows="3"
+                        placeholder="Tell us about your experience and expertise..."
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; resize: vertical; font-family: inherit;"
+                    ></textarea>
+                </div>
+            </div>
+
+            <button 
+                type="submit" 
+                style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);"
+                onmouseover="this.style.transform='translateY(-2px)'"
+                onmouseout="this.style.transform='translateY(0)'"
+            >
+                Create Agent Account
+            </button>
+        </form>
+
+        <!-- Info Box -->
+        <div style="background: #f0f4ff; border-left: 4px solid #667eea; padding: 15px; margin-top: 25px; border-radius: 8px;">
+            <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6;">
+                <strong style="color: #667eea;">As an agent,</strong> you can showcase properties, build your reputation with reviews, and connect with buyers and sellers.
+            </p>
+        </div>
+
+        <!-- Login Link -->
+        <div style="text-align: center; margin-top: 25px;">
+            <p style="color: #666;">Already have an account? <a href="/auth/login?role=agent" style="color: #667eea; text-decoration: none; font-weight: 600;">Sign In</a></p>
+        </div>
+
+        <!-- Back to Home -->
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/" style="color: #999; text-decoration: none; font-size: 14px;">← Back to Home</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  # Service Registry (Eureka)
+  service-registry:
+    build:
+      context: ./service-registry
+      dockerfile: Dockerfile
+    image: realtyx-service-registry:latest
+    container_name: realtyx-service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - realtyx-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Data Service
+  data-service:
+    build:
+      context: ./data-service
+      dockerfile: Dockerfile
+    image: realtyx-data-service:latest
+    container_name: realtyx-data-service
+    ports:
+      - "9090:9090"
+    networks:
+      - realtyx-network
+    volumes:
+      - ./data:/app/data
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+    depends_on:
+      service-registry:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: realtyx-backend:latest
+    container_name: realtyx-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - realtyx-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - DATA_SERVICE_URL=http://data-service:9090
+    depends_on:
+      service-registry:
+        condition: service_healthy
+      data-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: realtyx-api-gateway:latest
+    container_name: realtyx-api-gateway
+    ports:
+      - "8765:8765"
+    networks:
+      - realtyx-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+    depends_on:
+      service-registry:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+      data-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8765/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # UI Application
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    image: realtyx-ui:latest
+    container_name: realtyx-ui
+    ports:
+      - "3001:3001"
+    networks:
+      - realtyx-network
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - BACKEND_URL=http://api-gateway:8765
+    depends_on:
+      - api-gateway
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  realtyx-network:
+    driver: bridge
+
+volumes:
+  data-volume:
+    driver: local

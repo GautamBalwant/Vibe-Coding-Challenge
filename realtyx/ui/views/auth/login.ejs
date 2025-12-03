@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RealtyX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+</head>
+<body>
+<div class="min-h-screen flex items-center justify-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 450px; width: 100%; padding: 50px 40px;">
+        <!-- Logo/Header -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 36px; font-weight: bold; color: #667eea; margin-bottom: 10px;">🏠 RealtyX</h1>
+            <p style="color: #666; font-size: 18px;">Sign in to your account</p>
+        </div>
+
+        <!-- Success Message -->
+        <% if (typeof query !== 'undefined' && query.success) { %>
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px;">
+                <%= query.success %>
+            </div>
+        <% } %>
+
+        <!-- Error Message -->
+        <% if (error) { %>
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px;">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Role Selection -->
+        <div style="margin-bottom: 30px;">
+            <label style="display: block; color: #333; font-weight: 600; margin-bottom: 10px;">I am a:</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <button type="button" onclick="selectRole('buyer')" id="role-buyer" style="padding: 12px; border: 2px solid <%= role === 'buyer' ? '#667eea' : '#e0e0e0' %>; background: <%= role === 'buyer' ? '#f0f4ff' : 'white' %>; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 600; color: <%= role === 'buyer' ? '#667eea' : '#666' %>;">
+                    🏡 Buyer
+                </button>
+                <button type="button" onclick="selectRole('seller')" id="role-seller" style="padding: 12px; border: 2px solid <%= role === 'seller' ? '#667eea' : '#e0e0e0' %>; background: <%= role === 'seller' ? '#f0f4ff' : 'white' %>; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 600; color: <%= role === 'seller' ? '#667eea' : '#666' %>;">
+                    💼 Seller
+                </button>
+                <button type="button" onclick="selectRole('agent')" id="role-agent" style="padding: 12px; border: 2px solid <%= role === 'agent' ? '#667eea' : '#e0e0e0' %>; background: <%= role === 'agent' ? '#f0f4ff' : 'white' %>; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 600; color: <%= role === 'agent' ? '#667eea' : '#666' %>;">
+                    👔 Agent
+                </button>
+                <button type="button" onclick="selectRole('admin')" id="role-admin" style="padding: 12px; border: 2px solid <%= role === 'admin' ? '#667eea' : '#e0e0e0' %>; background: <%= role === 'admin' ? '#f0f4ff' : 'white' %>; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 600; color: <%= role === 'admin' ? '#667eea' : '#666' %>;">
+                    🔐 Admin
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form method="POST" action="/auth/login">
+            <input type="hidden" name="role" id="selected-role" value="<%= role %>">
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Email Address</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    required
+                    placeholder="your.email@example.com"
+                    style="width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: border 0.3s;"
+                    onfocus="this.style.borderColor='#667eea'"
+                    onblur="this.style.borderColor='#e0e0e0'"
+                >
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Password</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    required
+                    placeholder="••••••••"
+                    style="width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: border 0.3s;"
+                    onfocus="this.style.borderColor='#667eea'"
+                    onblur="this.style.borderColor='#e0e0e0'"
+                >
+            </div>
+
+            <button 
+                type="submit" 
+                style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);"
+                onmouseover="this.style.transform='translateY(-2px)'"
+                onmouseout="this.style.transform='translateY(0)'"
+            >
+                Sign In
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div style="margin: 30px 0; text-align: center; position: relative;">
+            <span style="background: white; padding: 0 15px; color: #999; font-size: 14px; position: relative; z-index: 1;">OR</span>
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e0e0e0; z-index: 0;"></div>
+        </div>
+
+        <!-- Signup Links -->
+        <div style="text-align: center; margin-top: 25px;">
+            <p style="color: #666; margin-bottom: 15px;">Don't have an account?</p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <a href="/auth/signup/buyer" style="color: #667eea; text-decoration: none; font-weight: 600; padding: 8px 15px; border: 2px solid #667eea; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#667eea'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#667eea'">
+                    Buyer Signup
+                </a>
+                <a href="/auth/signup/seller" style="color: #667eea; text-decoration: none; font-weight: 600; padding: 8px 15px; border: 2px solid #667eea; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#667eea'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#667eea'">
+                    Seller Signup
+                </a>
+                <a href="/auth/signup/agent" style="color: #667eea; text-decoration: none; font-weight: 600; padding: 8px 15px; border: 2px solid #667eea; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#667eea'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#667eea'">
+                    Agent Signup
+                </a>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div style="text-align: center; margin-top: 25px;">
+            <a href="/" style="color: #999; text-decoration: none; font-size: 14px;" onmouseover="this.style.color='#667eea'" onmouseout="this.style.color='#999'">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectRole(role) {
+    // Update selected role
+    document.getElementById('selected-role').value = role;
+    
+    // Update button styles
+    ['buyer', 'seller', 'agent', 'admin'].forEach(r => {
+        const btn = document.getElementById('role-' + r);
+        if (r === role) {
+            btn.style.borderColor = '#667eea';
+            btn.style.background = '#f0f4ff';
+            btn.style.color = '#667eea';
+        } else {
+            btn.style.borderColor = '#e0e0e0';
+            btn.style.background = 'white';
+            btn.style.color = '#666';
+        }
+    });
+}
+</script>
+</body>
+</html>

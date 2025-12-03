@@ -1,0 +1,160 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Admin Header -->
+  <header class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">RealtyX Admin Dashboard</h1>
+        <p class="text-gray-600">Welcome, <%= adminUser %></p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="/" class="text-blue-600 hover:text-blue-800">View Site</a>
+        <a href="/admin/logout" class="text-red-600 hover:text-red-800">Logout</a>
+      </div>
+    </div>
+  </header>
+  
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-semibold uppercase">Total Properties</p>
+            <p class="text-3xl font-bold text-gray-800 mt-2"><%= stats.totalProperties %></p>
+          </div>
+          <div class="bg-blue-100 p-3 rounded-full">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-semibold uppercase">Active Properties</p>
+            <p class="text-3xl font-bold text-gray-800 mt-2"><%= stats.activeProperties %></p>
+          </div>
+          <div class="bg-green-100 p-3 rounded-full">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-semibold uppercase">Total Brokers</p>
+            <p class="text-3xl font-bold text-gray-800 mt-2"><%= stats.totalBrokers %></p>
+          </div>
+          <div class="bg-purple-100 p-3 rounded-full">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="/admin/property/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
+          + Add Property
+        </a>
+        <a href="/admin/broker/add" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
+          + Add Broker
+        </a>
+        <a href="/admin/reports" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
+          📊 View Reports
+        </a>
+        <button class="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+          ⚙️ Settings
+        </button>
+      </div>
+    </div>
+    
+    <!-- Properties Table -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Properties</h2>
+      <% if (properties && properties.length > 0) { %>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b-2 border-gray-200">
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">ID</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Title</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Type</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Price</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% properties.slice(0, 10).forEach(function(property) { %>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4">#<%= property.id %></td>
+                  <td class="py-3 px-4 font-medium"><%= property.title %></td>
+                  <td class="py-3 px-4"><%= property.propertyType %></td>
+                  <td class="py-3 px-4">₹<%= (property.price / 100000).toFixed(2) %>L</td>
+                  <td class="py-3 px-4">
+                    <span class="<%= property.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800' %> px-2 py-1 rounded text-xs font-semibold">
+                      <%= property.status %>
+                    </span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <a href="/property/<%= property.id %>" class="text-blue-600 hover:text-blue-800 mr-3" target="_blank">View</a>
+                    <button class="text-green-600 hover:text-green-800 mr-3">Edit</button>
+                    <button class="text-red-600 hover:text-red-800">Delete</button>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500 text-center py-8">No properties found.</p>
+      <% } %>
+    </div>
+    
+    <!-- Brokers Table -->
+    <% if (brokers && brokers.length > 0) { %>
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Brokers</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b-2 border-gray-200">
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">ID</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Phone</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">License</th>
+                <th class="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% brokers.forEach(function(broker) { %>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4">#<%= broker.id %></td>
+                  <td class="py-3 px-4 font-medium"><%= broker.name %></td>
+                  <td class="py-3 px-4"><%= broker.email %></td>
+                  <td class="py-3 px-4"><%= broker.phone %></td>
+                  <td class="py-3 px-4 text-xs"><%= broker.licenseNumber %></td>
+                  <td class="py-3 px-4">
+                    <button class="text-green-600 hover:text-green-800 mr-3">Edit</button>
+                    <button class="text-red-600 hover:text-red-800">Delete</button>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

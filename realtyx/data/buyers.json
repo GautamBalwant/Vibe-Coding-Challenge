@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Suresh Reddy",
+    "email": "suresh.buyer@gmail.com",
+    "phone": "9123456780",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "profileImage": "https://i.pravatar.cc/150?img=51",
+    "isActive": true,
+    "registeredDate": "2025-10-15",
+    "preferences": {
+      "preferredCities": ["Mumbai", "Pune"],
+      "propertyTypes": ["Apartment", "Villa"],
+      "minBedrooms": 2,
+      "maxBedrooms": 3,
+      "minPrice": 5000000,
+      "maxPrice": 15000000,
+      "minArea": 1000,
+      "maxArea": 2000,
+      "mustHaveAmenities": ["Parking", "Gym", "Swimming Pool"],
+      "moveInDate": "2026-03-01"
+    },
+    "savedProperties": [],
+    "viewedProperties": []
+  },
+  {
+    "id": 2,
+    "name": "Kavita Iyer",
+    "email": "kavita.buyer@gmail.com",
+    "phone": "9123456781",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "profileImage": "https://i.pravatar.cc/150?img=45",
+    "isActive": true,
+    "registeredDate": "2025-11-01",
+    "preferences": {
+      "preferredCities": ["Bangalore"],
+      "propertyTypes": ["Penthouse", "Apartment"],
+      "minBedrooms": 3,
+      "maxBedrooms": 4,
+      "minPrice": 20000000,
+      "maxPrice": 50000000,
+      "minArea": 2500,
+      "maxArea": 4000,
+      "mustHaveAmenities": ["Security", "Club House", "Landscaped Gardens"],
+      "moveInDate": "2026-06-01"
+    },
+    "savedProperties": [],
+    "viewedProperties": []
+  }
+]

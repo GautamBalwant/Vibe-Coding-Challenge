@@ -1,0 +1,103 @@
+[
+  {
+    "id": 1,
+    "name": "Rajesh Gupta",
+    "companyName": "Prestige Group",
+    "email": "contact@prestigegroup.com",
+    "phone": "022-12345678",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "registrationNumber": "BUILDER-MH-2010-001",
+    "establishedYear": "2010",
+    "rating": 4.6,
+    "logo": "https://via.placeholder.com/200x100?text=Prestige+Group",
+    "website": "https://prestigegroup.com",
+    "description": "Leading real estate developer with 15+ years of excellence in creating premium residential and commercial spaces.",
+    "isActive": true,
+    "totalProjects": 45,
+    "completedProjects": 32,
+    "ongoingProjects": 8,
+    "upcomingProjects": 5,
+    "totalUnitsSold": 8500,
+    "projects": [
+      {
+        "projectId": 1001,
+        "projectName": "Prestige Heights",
+        "status": "Completed",
+        "location": "Andheri, Mumbai",
+        "totalUnits": 250,
+        "soldUnits": 250,
+        "launchDate": "2020-01-15",
+        "completionDate": "2023-06-30",
+        "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300"
+      },
+      {
+        "projectId": 1002,
+        "projectName": "Prestige Gardens",
+        "status": "Ongoing",
+        "location": "Bandra, Mumbai",
+        "totalUnits": 180,
+        "soldUnits": 145,
+        "launchDate": "2023-03-01",
+        "completionDate": "2026-12-31",
+        "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300"
+      },
+      {
+        "projectId": 1003,
+        "projectName": "Prestige Vista",
+        "status": "Upcoming",
+        "location": "Powai, Mumbai",
+        "totalUnits": 320,
+        "soldUnits": 0,
+        "launchDate": "2026-06-01",
+        "completionDate": "2029-12-31",
+        "imageUrl": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300"
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "id": 2,
+    "name": "Anil Shah",
+    "companyName": "DLF Limited",
+    "email": "info@dlf.com",
+    "phone": "080-23456789",
+    "password": "$2b$10$KTBTshatFgJPAjm5Nu2W5Oqq7C0X3dntLvKXEchWhJzMOyGVrcc4O",
+    "registrationNumber": "BUILDER-KA-2008-002",
+    "establishedYear": "2008",
+    "rating": 4.7,
+    "logo": "https://via.placeholder.com/200x100?text=DLF+Limited",
+    "website": "https://dlf.com",
+    "description": "Trusted name in real estate with a commitment to quality and timely delivery.",
+    "isActive": true,
+    "totalProjects": 38,
+    "completedProjects": 28,
+    "ongoingProjects": 6,
+    "upcomingProjects": 4,
+    "totalUnitsSold": 7200,
+    "projects": [
+      {
+        "projectId": 2001,
+        "projectName": "DLF Cyber City",
+        "status": "Completed",
+        "location": "Whitefield, Bangalore",
+        "totalUnits": 300,
+        "soldUnits": 300,
+        "launchDate": "2019-06-01",
+        "completionDate": "2022-12-31",
+        "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300"
+      },
+      {
+        "projectId": 2002,
+        "projectName": "DLF Seasons",
+        "status": "Ongoing",
+        "location": "Koramangala, Bangalore",
+        "totalUnits": 220,
+        "soldUnits": 180,
+        "launchDate": "2024-01-15",
+        "completionDate": "2027-06-30",
+        "imageUrl": "https://images.unsplash.com/photo-1502672260066-6bc476e4e2ca?w=400&h=300"
+      }
+    ],
+    "reviews": []
+  }
+]

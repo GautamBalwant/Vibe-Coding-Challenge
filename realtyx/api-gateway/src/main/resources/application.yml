@@ -1,0 +1,146 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # Data Service Routes
+        - id: data-service
+          uri: lb://data-service
+          predicates:
+            - Path=/data/**
+          filters:
+            - RewritePath=/data/(?<segment>.*), /api/data/$\{segment}
+            - name: CircuitBreaker
+              args:
+                name: dataServiceCircuitBreaker
+                fallbackUri: forward:/fallback/data-service
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+
+        # Backend Service Routes
+        - id: backend-service
+          uri: lb://backend-service
+          predicates:
+            - Path=/api/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: backendServiceCircuitBreaker
+                fallbackUri: forward:/fallback/backend-service
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                methods: GET,POST
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms
+
+        # UI Service Routes (if needed for server-side routing)
+        - id: ui-service
+          uri: http://localhost:3001
+          predicates:
+            - Path=/ui/**
+          filters:
+            - RewritePath=/ui/(?<segment>.*), /$\{segment}
+
+      default-filters:
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY
+        - AddResponseHeader=X-Response-Time, ${execution.time}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      dataServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
+        record-exceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+      backendServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 15s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
+        slow-call-duration-threshold: 2s
+        slow-call-rate-threshold: 50
+
+  # Retry Configuration
+  retry:
+    instances:
+      dataServiceRetry:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+      backendServiceRetry:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+
+  # Time Limiter Configuration
+  timelimiter:
+    instances:
+      dataServiceCircuitBreaker:
+        timeout-duration: 3s
+      backendServiceCircuitBreaker:
+        timeout-duration: 5s
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers,circuitbreakerevents,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    io.github.resilience4j: DEBUG
+    com.realtyx.gateway: DEBUG
